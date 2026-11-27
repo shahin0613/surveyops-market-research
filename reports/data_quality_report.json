@@ -1,0 +1,442 @@
+{
+  "records": 600,
+  "status_counts": {
+    "complete": 500,
+    "screened_out": 60,
+    "abandoned": 40
+  },
+  "flagged_completes": 48,
+  "clean_completes": 452,
+  "dropout_pct": 7.4,
+  "quota": {
+    "age_band": [
+      {
+        "cell": "18-24",
+        "target": 200,
+        "completes": 198,
+        "pct": 99.0
+      },
+      {
+        "cell": "25-34",
+        "target": 180,
+        "completes": 158,
+        "pct": 87.8
+      },
+      {
+        "cell": "35-45",
+        "target": 120,
+        "completes": 96,
+        "pct": 80.0
+      }
+    ],
+    "city_tier": [
+      {
+        "cell": "metro",
+        "target": 220,
+        "completes": 195,
+        "pct": 88.6
+      },
+      {
+        "cell": "tier2",
+        "target": 160,
+        "completes": 140,
+        "pct": 87.5
+      },
+      {
+        "cell": "tier3",
+        "target": 120,
+        "completes": 117,
+        "pct": 97.5
+      }
+    ]
+  },
+  "warn_at": 0.9,
+  "median_seconds": {
+    "yes": 76.0,
+    "no": 22.0
+  },
+  "evaluation": {
+    "planted": 50,
+    "caught": 48,
+    "per_type": {
+      "speeder": {
+        "planted": 10,
+        "caught": 8
+      },
+      "straightliner": {
+        "planted": 10,
+        "caught": 10
+      },
+      "routing": {
+        "planted": 8,
+        "caught": 8
+      },
+      "contradiction": {
+        "planted": 6,
+        "caught": 6
+      },
+      "invalid_value": {
+        "planted": 4,
+        "caught": 4
+      },
+      "missing_required": {
+        "planted": 4,
+        "caught": 4
+      },
+      "duplicate": {
+        "planted": 8,
+        "caught": 8
+      }
+    },
+    "missed": [
+      {
+        "respondent_id": "R00451",
+        "error_type": "speeder"
+      },
+      {
+        "respondent_id": "R00456",
+        "error_type": "speeder"
+      }
+    ],
+    "false_positives": []
+  },
+  "sql": {
+    "status_counts": [
+      {
+        "status": "complete",
+        "responses": 500
+      },
+      {
+        "status": "screened_out",
+        "responses": 60
+      },
+      {
+        "status": "abandoned",
+        "responses": 40
+      }
+    ],
+    "dropout_rate": [
+      {
+        "dropout_pct": 7.4
+      }
+    ],
+    "dropout_by_last_question": [
+      {
+        "last_question": "S2",
+        "abandoned": 7
+      },
+      {
+        "last_question": "Q8",
+        "abandoned": 7
+      },
+      {
+        "last_question": "Q7",
+        "abandoned": 6
+      },
+      {
+        "last_question": "Q1",
+        "abandoned": 6
+      },
+      {
+        "last_question": "S1",
+        "abandoned": 4
+      },
+      {
+        "last_question": "Q4",
+        "abandoned": 4
+      },
+      {
+        "last_question": "Q5",
+        "abandoned": 3
+      },
+      {
+        "last_question": "Q2",
+        "abandoned": 2
+      },
+      {
+        "last_question": "Q6",
+        "abandoned": 1
+      }
+    ],
+    "flags_by_rule": [
+      {
+        "rule": "straightlining",
+        "flagged": 10
+      },
+      {
+        "rule": "speeder",
+        "flagged": 8
+      },
+      {
+        "rule": "routing_violation",
+        "flagged": 8
+      },
+      {
+        "rule": "duplicate",
+        "flagged": 8
+      },
+      {
+        "rule": "contradiction",
+        "flagged": 6
+      },
+      {
+        "rule": "missing_required",
+        "flagged": 4
+      },
+      {
+        "rule": "invalid_option",
+        "flagged": 2
+      },
+      {
+        "rule": "ineligible_complete",
+        "flagged": 2
+      }
+    ],
+    "completes_by_age_band": [
+      {
+        "age_band": "18-24",
+        "completes": 198
+      },
+      {
+        "age_band": "25-34",
+        "completes": 158
+      },
+      {
+        "age_band": "35-45",
+        "completes": 96
+      }
+    ],
+    "completes_by_city_tier": [
+      {
+        "city_tier": "metro",
+        "completes": 195
+      },
+      {
+        "city_tier": "tier2",
+        "completes": 140
+      },
+      {
+        "city_tier": "tier3",
+        "completes": 117
+      }
+    ],
+    "avg_completion_time_by_age_band": [
+      {
+        "age_band": "18-24",
+        "avg_seconds": 72.9
+      },
+      {
+        "age_band": "25-34",
+        "avg_seconds": 68.8
+      },
+      {
+        "age_band": "35-45",
+        "avg_seconds": 68.4
+      }
+    ],
+    "responses_per_day": [
+      {
+        "day": "2026-11-10",
+        "responses": 30
+      },
+      {
+        "day": "2026-11-11",
+        "responses": 63
+      },
+      {
+        "day": "2026-11-12",
+        "responses": 38
+      },
+      {
+        "day": "2026-11-13",
+        "responses": 54
+      },
+      {
+        "day": "2026-11-14",
+        "responses": 44
+      },
+      {
+        "day": "2026-11-15",
+        "responses": 50
+      },
+      {
+        "day": "2026-11-16",
+        "responses": 39
+      },
+      {
+        "day": "2026-11-17",
+        "responses": 51
+      },
+      {
+        "day": "2026-11-18",
+        "responses": 39
+      },
+      {
+        "day": "2026-11-19",
+        "responses": 37
+      },
+      {
+        "day": "2026-11-20",
+        "responses": 46
+      },
+      {
+        "day": "2026-11-21",
+        "responses": 32
+      },
+      {
+        "day": "2026-11-22",
+        "responses": 36
+      },
+      {
+        "day": "2026-11-23",
+        "responses": 41
+      }
+    ],
+    "platform_usage_by_age_band": [
+      {
+        "age_band": "18-24",
+        "platform": "youtube",
+        "users": 164,
+        "pct_of_streamers": 89.6
+      },
+      {
+        "age_band": "18-24",
+        "platform": "netflix",
+        "users": 102,
+        "pct_of_streamers": 55.7
+      },
+      {
+        "age_band": "18-24",
+        "platform": "prime",
+        "users": 99,
+        "pct_of_streamers": 54.1
+      },
+      {
+        "age_band": "18-24",
+        "platform": "hotstar",
+        "users": 96,
+        "pct_of_streamers": 52.5
+      },
+      {
+        "age_band": "18-24",
+        "platform": "jiocinema",
+        "users": 73,
+        "pct_of_streamers": 39.9
+      },
+      {
+        "age_band": "18-24",
+        "platform": "sonyliv",
+        "users": 25,
+        "pct_of_streamers": 13.7
+      },
+      {
+        "age_band": "18-24",
+        "platform": "zee5",
+        "users": 21,
+        "pct_of_streamers": 11.5
+      },
+      {
+        "age_band": "18-24",
+        "platform": "other",
+        "users": 11,
+        "pct_of_streamers": 6.0
+      },
+      {
+        "age_band": "25-34",
+        "platform": "youtube",
+        "users": 113,
+        "pct_of_streamers": 82.5
+      },
+      {
+        "age_band": "25-34",
+        "platform": "netflix",
+        "users": 78,
+        "pct_of_streamers": 56.9
+      },
+      {
+        "age_band": "25-34",
+        "platform": "prime",
+        "users": 75,
+        "pct_of_streamers": 54.7
+      },
+      {
+        "age_band": "25-34",
+        "platform": "hotstar",
+        "users": 72,
+        "pct_of_streamers": 52.6
+      },
+      {
+        "age_band": "25-34",
+        "platform": "jiocinema",
+        "users": 52,
+        "pct_of_streamers": 38.0
+      },
+      {
+        "age_band": "25-34",
+        "platform": "sonyliv",
+        "users": 34,
+        "pct_of_streamers": 24.8
+      },
+      {
+        "age_band": "25-34",
+        "platform": "zee5",
+        "users": 32,
+        "pct_of_streamers": 23.4
+      },
+      {
+        "age_band": "25-34",
+        "platform": "other",
+        "users": 12,
+        "pct_of_streamers": 8.8
+      },
+      {
+        "age_band": "35-45",
+        "platform": "youtube",
+        "users": 66,
+        "pct_of_streamers": 80.5
+      },
+      {
+        "age_band": "35-45",
+        "platform": "prime",
+        "users": 45,
+        "pct_of_streamers": 54.9
+      },
+      {
+        "age_band": "35-45",
+        "platform": "hotstar",
+        "users": 40,
+        "pct_of_streamers": 48.8
+      },
+      {
+        "age_band": "35-45",
+        "platform": "jiocinema",
+        "users": 29,
+        "pct_of_streamers": 35.4
+      },
+      {
+        "age_band": "35-45",
+        "platform": "netflix",
+        "users": 27,
+        "pct_of_streamers": 32.9
+      },
+      {
+        "age_band": "35-45",
+        "platform": "sonyliv",
+        "users": 26,
+        "pct_of_streamers": 31.7
+      },
+      {
+        "age_band": "35-45",
+        "platform": "zee5",
+        "users": 22,
+        "pct_of_streamers": 26.8
+      },
+      {
+        "age_band": "35-45",
+        "platform": "other",
+        "users": 3,
+        "pct_of_streamers": 3.7
+      }
+    ]
+  }
+}

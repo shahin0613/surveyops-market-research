@@ -1,0 +1,7 @@
+@"
+db/*.db
+data/*.db
+__pycache__/
+.pytest_cache/
+.vscode/
+"@ | Set-Content -Encoding utf8 .gitignore

@@ -1,0 +1,49 @@
+respondent_id,rules,details
+R00452,speeder,23s against a typical 76s
+R00453,speeder,14s against a typical 76s
+R00454,speeder,24s against a typical 76s
+R00455,speeder,21s against a typical 76s
+R00457,speeder,27s against a typical 76s
+R00458,speeder,24s against a typical 76s
+R00459,speeder,28s against a typical 76s
+R00460,speeder,29s against a typical 76s
+R00461,straightlining,Q8 gives the same rating (5) to every row
+R00462,straightlining,Q8 gives the same rating (5) to every row
+R00463,straightlining,Q8 gives the same rating (1) to every row
+R00464,straightlining,Q8 gives the same rating (3) to every row
+R00465,straightlining,Q8 gives the same rating (5) to every row
+R00466,straightlining,Q8 gives the same rating (5) to every row
+R00467,straightlining,Q8 gives the same rating (1) to every row
+R00468,straightlining,Q8 gives the same rating (5) to every row
+R00469,straightlining,Q8 gives the same rating (3) to every row
+R00470,straightlining,Q8 gives the same rating (1) to every row
+R00471,routing_violation,Q10 answered but should have been skipped
+R00472,routing_violation,Q10 answered but should have been skipped
+R00473,routing_violation,Q6 answered but should have been skipped
+R00474,routing_violation,Q10 answered but should have been skipped
+R00475,routing_violation,Q10 answered but should have been skipped
+R00476,routing_violation,Q10 answered but should have been skipped
+R00477,routing_violation,Q6 answered but should have been skipped
+R00478,routing_violation,Q10 answered but should have been skipped
+R00479,contradiction,Q4='netflix' was not among the Q2 selections
+R00480,contradiction,Q4='zee5' was not among the Q2 selections
+R00481,contradiction,Q4='netflix' was not among the Q2 selections
+R00482,contradiction,Q4='hotstar' was not among the Q2 selections
+R00483,contradiction,Q4='sonyliv' was not among the Q2 selections
+R00484,contradiction,Q4='zee5' was not among the Q2 selections
+R00485,invalid_option,Q9='999' is not a valid answer code
+R00486,ineligible_complete,S1=60 should have ended the survey (age_out_of_range)
+R00487,ineligible_complete,S1=60 should have ended the survey (age_out_of_range)
+R00488,invalid_option,Q9='999' is not a valid answer code
+R00489,missing_required,Q5 was shown but not answered
+R00490,missing_required,Q9 was shown but not answered
+R00491,missing_required,Q7 was shown but not answered
+R00492,missing_required,Q7 was shown but not answered
+R00493,duplicate,identical answers to R00425 within 156s
+R00494,duplicate,identical answers to R00310 within 146s
+R00495,duplicate,identical answers to R00401 within 162s
+R00496,duplicate,identical answers to R00329 within 144s
+R00497,duplicate,identical answers to R00302 within 86s
+R00498,duplicate,identical answers to R00386 within 82s
+R00499,duplicate,identical answers to R00187 within 98s
+R00500,duplicate,identical answers to R00114 within 74s

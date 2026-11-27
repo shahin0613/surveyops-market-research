@@ -1,0 +1,34 @@
+:root {
+  --ink: #17212b; --muted: #566676; --line: #cfd8e1; --paper: #eef2f5; --card: #ffffff;
+  --accent: #1d4e89; --accent-ink: #ffffff; --error: #b3261e;
+  --serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  --sans: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--paper); color: var(--ink); font: 16px/1.5 var(--sans); }
+.shell { max-width: 680px; margin: 0 auto; padding: 28px 18px 60px; }
+.title { margin: 0 0 10px; color: var(--muted); font-size: 0.95rem; }
+.bar { height: 4px; background: var(--line); border-radius: 2px; overflow: hidden; margin-bottom: 22px; }
+.bar span { display: block; height: 100%; width: 0; background: var(--accent); transition: width 0.25s ease; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 26px 24px; }
+.question { margin: 0 0 20px; font: 600 1.35rem/1.35 var(--serif); }
+.options { display: grid; gap: 8px; }
+.option { display: flex; gap: 12px; align-items: flex-start; padding: 11px 13px; border: 1px solid var(--line); border-radius: 8px; cursor: pointer; }
+.option:hover { border-color: var(--accent); }
+.option:has(input:checked) { border-color: var(--accent); background: #eaf1f9; }
+.option input { margin-top: 4px; accent-color: var(--accent); }
+.text-input { width: 100%; max-width: 360px; padding: 10px 12px; font: inherit; border: 1px solid var(--line); border-radius: 8px; }
+.matrix { overflow-x: auto; }
+.matrix table { border-collapse: collapse; min-width: 560px; width: 100%; font-size: 0.9rem; }
+.matrix th, .matrix td { padding: 9px 6px; text-align: center; border-bottom: 1px solid var(--line); }
+.matrix th[scope=row] { text-align: left; font-weight: 500; width: 28%; }
+.matrix thead th { font-weight: 500; color: var(--muted); font-size: 0.8rem; }
+.matrix input { accent-color: var(--accent); }
+.error { min-height: 1.4em; margin: 14px 0 0; color: var(--error); font-size: 0.92rem; }
+.note { margin: 0 0 18px; color: var(--muted); }
+.next { margin-top: 6px; padding: 11px 24px; font: 600 1rem var(--sans); color: var(--accent-ink); background: var(--accent); border: 0; border-radius: 8px; cursor: pointer; }
+.next:hover { background: #163c6a; }
+:focus-visible { outline: 3px solid #7aa7d9; outline-offset: 2px; }
+details { margin-top: 18px; color: var(--muted); font-size: 0.9rem; }
+pre { overflow-x: auto; padding: 12px; background: var(--paper); border-radius: 8px; font-size: 0.8rem; }
+@media (prefers-reduced-motion: reduce) { .bar span { transition: none; } }

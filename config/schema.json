@@ -1,0 +1,87 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "SurveyOps questionnaire",
+  "type": "object",
+  "required": ["survey_id", "title", "version", "questions"],
+  "additionalProperties": false,
+  "properties": {
+    "survey_id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "title": { "type": "string" },
+    "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+$" },
+    "questions": { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/question" } }
+  },
+  "definitions": {
+    "condition": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": ["q", "op"],
+          "additionalProperties": false,
+          "properties": {
+            "q": { "type": "string" },
+            "op": { "enum": ["eq", "ne", "in", "contains", "gt", "gte", "lt", "lte", "answered"] },
+            "value": {}
+          }
+        },
+        {
+          "type": "object", "required": ["all"], "additionalProperties": false,
+          "properties": { "all": { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/condition" } } }
+        },
+        {
+          "type": "object", "required": ["any"], "additionalProperties": false,
+          "properties": { "any": { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/condition" } } }
+        },
+        {
+          "type": "object", "required": ["not"], "additionalProperties": false,
+          "properties": { "not": { "$ref": "#/definitions/condition" } }
+        }
+      ]
+    },
+    "option": {
+      "type": "object",
+      "required": ["id", "label"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z0-9_]+$" },
+        "label": { "type": "string" },
+        "anchor": { "type": "boolean" },
+        "exclusive": { "type": "boolean" }
+      }
+    },
+    "question": {
+      "type": "object",
+      "required": ["id", "type", "text", "required"],
+      "additionalProperties": false,
+      "properties": {
+        "id": { "type": "string", "pattern": "^[A-Z][A-Za-z0-9]*$" },
+        "type": { "enum": ["single_select", "multi_select", "numeric", "text", "matrix"] },
+        "text": { "type": "string", "minLength": 1 },
+        "required": { "type": "boolean" },
+        "options": { "type": "array", "minItems": 2, "items": { "$ref": "#/definitions/option" } },
+        "options_from": { "type": "string" },
+        "randomize": { "type": "boolean" },
+        "min_select": { "type": "integer", "minimum": 1 },
+        "max_length": { "type": "integer", "minimum": 1 },
+        "min": { "type": "number" },
+        "max": { "type": "number" },
+        "rows": { "type": "array", "minItems": 1, "items": { "$ref": "#/definitions/option" } },
+        "scale": { "type": "array", "minItems": 2, "items": { "$ref": "#/definitions/option" } },
+        "randomize_rows": { "type": "boolean" },
+        "show_if": { "$ref": "#/definitions/condition" },
+        "terminate_if": { "$ref": "#/definitions/condition" },
+        "terminate_reason": { "type": "string" },
+        "pipe_from": { "type": "array", "items": { "type": "string" } },
+        "quota_group": { "type": "string" }
+      },
+      "dependencies": { "terminate_if": ["terminate_reason"] },
+      "allOf": [
+        {
+          "if": { "properties": { "type": { "enum": ["single_select", "multi_select"] } } },
+          "then": { "anyOf": [{ "required": ["options"] }, { "required": ["options_from"] }] }
+        },
+        { "if": { "properties": { "type": { "const": "numeric" } } }, "then": { "required": ["min", "max"] } },
+        { "if": { "properties": { "type": { "const": "matrix" } } }, "then": { "required": ["rows", "scale"] } }
+      ]
+    }
+  }
+}

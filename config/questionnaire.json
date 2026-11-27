@@ -1,0 +1,143 @@
+{
+  "survey_id": "streaming-habits-india",
+  "title": "Streaming Habits in India",
+  "version": "1.0.0",
+  "questions": [
+    {
+      "id": "S1", "type": "numeric", "required": true,
+      "text": "What is your age?",
+      "min": 10, "max": 99,
+      "quota_group": "age_band",
+      "terminate_if": { "any": [{ "q": "S1", "op": "lt", "value": 18 }, { "q": "S1", "op": "gt", "value": 45 }] },
+      "terminate_reason": "age_out_of_range"
+    },
+    {
+      "id": "S2", "type": "single_select", "required": true,
+      "text": "Which best describes where you live?",
+      "options": [
+        { "id": "metro", "label": "A metro city (Mumbai, Delhi NCR, Bengaluru, Chennai, Kolkata, Hyderabad)" },
+        { "id": "tier2", "label": "A Tier 2 city (e.g. Pune, Jaipur, Lucknow, Indore)" },
+        { "id": "tier3", "label": "A smaller city or town" },
+        { "id": "outside_india", "label": "I live outside India" }
+      ],
+      "quota_group": "city_tier",
+      "terminate_if": { "q": "S2", "op": "eq", "value": "outside_india" },
+      "terminate_reason": "outside_india"
+    },
+    {
+      "id": "Q1", "type": "single_select", "required": true,
+      "text": "In the last 30 days, have you watched shows or films on any streaming platform (paid or free)?",
+      "options": [{ "id": "yes", "label": "Yes" }, { "id": "no", "label": "No" }]
+    },
+    {
+      "id": "Q2", "type": "multi_select", "required": true, "min_select": 1,
+      "text": "Which of these streaming platforms have you used in the last 30 days?",
+      "options": [
+        { "id": "netflix", "label": "Netflix" },
+        { "id": "prime", "label": "Amazon Prime Video" },
+        { "id": "hotstar", "label": "Disney+ Hotstar" },
+        { "id": "jiocinema", "label": "JioCinema" },
+        { "id": "sonyliv", "label": "SonyLIV" },
+        { "id": "zee5", "label": "ZEE5" },
+        { "id": "youtube", "label": "YouTube" },
+        { "id": "other", "label": "Other", "anchor": true }
+      ],
+      "randomize": true,
+      "show_if": { "q": "Q1", "op": "eq", "value": "yes" }
+    },
+    {
+      "id": "Q3", "type": "text", "required": true, "max_length": 60,
+      "text": "You selected 'Other'. Which other platform do you use?",
+      "show_if": { "q": "Q2", "op": "contains", "value": "other" }
+    },
+    {
+      "id": "Q4", "type": "single_select", "required": true,
+      "text": "Which of these platforms do you use the most?",
+      "options_from": "Q2",
+      "randomize": true,
+      "show_if": { "q": "Q1", "op": "eq", "value": "yes" }
+    },
+    {
+      "id": "Q5", "type": "single_select", "required": true,
+      "text": "Roughly how many hours a week do you spend watching {{Q4}}?",
+      "pipe_from": ["Q4"],
+      "options": [
+        { "id": "lt2", "label": "Less than 2 hours" },
+        { "id": "2to5", "label": "2 to 5 hours" },
+        { "id": "6to10", "label": "6 to 10 hours" },
+        { "id": "gt10", "label": "More than 10 hours" }
+      ],
+      "show_if": { "q": "Q1", "op": "eq", "value": "yes" }
+    },
+    {
+      "id": "Q6", "type": "single_select", "required": true,
+      "text": "How do you mainly pay for Netflix?",
+      "options": [
+        { "id": "own", "label": "My own subscription" },
+        { "id": "family", "label": "Shared with family" },
+        { "id": "friends", "label": "Shared with friends" },
+        { "id": "bundle", "label": "Bundled with a mobile or broadband plan" }
+      ],
+      "randomize": true,
+      "show_if": { "q": "Q2", "op": "contains", "value": "netflix" }
+    },
+    {
+      "id": "Q7", "type": "multi_select", "required": true, "min_select": 1,
+      "text": "How do you usually discover new shows or films to watch?",
+      "options": [
+        { "id": "friends", "label": "Friends or family" },
+        { "id": "social", "label": "Social media or influencers" },
+        { "id": "recs", "label": "The platform's recommendations" },
+        { "id": "ads", "label": "Ads or trailers" },
+        { "id": "reviews", "label": "Reviews or ratings sites" },
+        { "id": "none", "label": "I don't actively look for new content", "exclusive": true, "anchor": true }
+      ],
+      "randomize": true,
+      "show_if": { "q": "Q1", "op": "eq", "value": "yes" }
+    },
+    {
+      "id": "Q8", "type": "matrix", "required": true,
+      "text": "How important is each of these when choosing a streaming platform?",
+      "rows": [
+        { "id": "price", "label": "Subscription price" },
+        { "id": "variety", "label": "Variety of content" },
+        { "id": "regional", "label": "Regional-language content" },
+        { "id": "quality", "label": "Video quality" },
+        { "id": "adfree", "label": "Ad-free viewing" }
+      ],
+      "scale": [
+        { "id": "1", "label": "Not important" },
+        { "id": "2", "label": "Slightly important" },
+        { "id": "3", "label": "Moderately important" },
+        { "id": "4", "label": "Important" },
+        { "id": "5", "label": "Very important" }
+      ],
+      "randomize_rows": true,
+      "show_if": { "q": "Q1", "op": "eq", "value": "yes" }
+    },
+    {
+      "id": "Q9", "type": "single_select", "required": true,
+      "text": "What is the most you would pay per month for a streaming subscription?",
+      "options": [
+        { "id": "lt100", "label": "Less than ₹100" },
+        { "id": "100to199", "label": "₹100 to ₹199" },
+        { "id": "200to399", "label": "₹200 to ₹399" },
+        { "id": "gt400", "label": "₹400 or more" }
+      ],
+      "show_if": { "q": "Q1", "op": "eq", "value": "yes" }
+    },
+    {
+      "id": "Q10", "type": "single_select", "required": true,
+      "text": "What is the main reason you haven't used a streaming platform recently?",
+      "options": [
+        { "id": "cost", "label": "Too expensive" },
+        { "id": "time", "label": "No time" },
+        { "id": "tv", "label": "I prefer TV or other media" },
+        { "id": "internet", "label": "Poor internet connection" },
+        { "id": "interest", "label": "Not interested" }
+      ],
+      "randomize": true,
+      "show_if": { "q": "Q1", "op": "eq", "value": "no" }
+    }
+  ]
+}

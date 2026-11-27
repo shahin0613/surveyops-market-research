@@ -1,0 +1,22 @@
+{
+  "total_target": 500,
+  "warn_at": 0.9,
+  "groups": {
+    "age_band": {
+      "source": "S1",
+      "cells": [
+        { "id": "18-24", "min": 18, "max": 24, "target": 200 },
+        { "id": "25-34", "min": 25, "max": 34, "target": 180 },
+        { "id": "35-45", "min": 35, "max": 45, "target": 120 }
+      ]
+    },
+    "city_tier": {
+      "source": "S2",
+      "cells": [
+        { "id": "metro", "option": "metro", "target": 220 },
+        { "id": "tier2", "option": "tier2", "target": 160 },
+        { "id": "tier3", "option": "tier3", "target": 120 }
+      ]
+    }
+  }
+}

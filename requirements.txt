@@ -1,0 +1,7 @@
+flask
+jsonschema
+pandas
+openpyxl
+playwright
+pytest
+pytest-html

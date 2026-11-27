@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SurveyOps fieldwork dashboard</title>
+  <style>
+    :root { --ink:#17212b; --muted:#566676; --line:#cfd8e1; --paper:#eef2f5; --card:#fff; --blue:#1d4e89; --amber:#c27a00; --red:#b3261e; --teal:#2a8c82;
+            --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--paper); color:var(--ink); font:15px/1.45 var(--sans); }
+    .wrap { max-width:1120px; margin:0 auto; padding:26px 18px 56px; }
+    h1 { margin:0; font-size:1.5rem; }
+    h2 { margin:0 0 12px; font-size:1rem; }
+    .sub { margin:2px 0 18px; color:var(--muted); }
+    .banner { margin:0 0 14px; padding:11px 15px; border:1px solid #e8c98a; border-radius:10px; background:#fdf4e0; color:#6b4500; }
+    .kpis { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; margin-bottom:14px; }
+    .kpi, .card { background:var(--card); border:1px solid var(--line); border-radius:10px; padding:14px 16px; }
+    .kpi b { display:block; font-size:1.7rem; line-height:1.2; }
+    .kpi span { color:var(--muted); font-size:.85rem; }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(min(440px,100%),1fr)); gap:14px; }
+    .chart { position:relative; height:260px; }
+    .qrow { display:grid; grid-template-columns:100px 1fr 130px; gap:10px; align-items:center; margin:8px 0; font-size:.9rem; }
+    .track { height:12px; overflow:hidden; border-radius:6px; background:var(--paper); }
+    .fill { height:100%; background:var(--blue); }
+    .warn .fill { background:var(--amber); } .full .fill { background:var(--red); }
+    .qrow small { color:var(--muted); text-align:right; }
+    .qrow.warn small { color:var(--amber); font-weight:600; } .qrow.full small { color:var(--red); font-weight:600; }
+    .qgroup { margin:14px 0 4px; color:var(--muted); font-size:.8rem; text-transform:uppercase; letter-spacing:.04em; }
+    table { width:100%; border-collapse:collapse; font-size:.9rem; }
+    td, th { padding:6px 4px; border-bottom:1px solid var(--line); text-align:left; }
+    th:last-child, td:last-child { text-align:right; }
+    .score { margin:0 0 10px; font-size:1.2rem; font-weight:600; }
+    .note { margin:10px 0 0; color:var(--muted); font-size:.85rem; }
+    code { background:var(--paper); padding:1px 5px; border-radius:4px; }
+  </style>
+</head>
+<body>
+  <main class="wrap" id="app">
+    <h1>Fieldwork monitoring</h1>
+    <p class="sub">Streaming Habits in India. Simulated study, read from <code>reports/data_quality_report.json</code>.</p>
+    <div id="banner"></div>
+    <div class="kpis" id="kpis"></div>
+    <div class="grid">
+      <section class="card"><h2>Quota fill (valid completes vs target)</h2><div id="quota"></div></section>
+      <section class="card"><h2>Pipeline accuracy on planted errors</h2><div id="eval"></div></section>
+      <section class="card"><h2>Responses per day</h2><div class="chart"><canvas id="daily" role="img" aria-label="Responses per day"></canvas></div></section>
+      <section class="card"><h2>Records failing quality checks</h2><div class="chart"><canvas id="flags" role="img" aria-label="Flags by rule"></canvas></div></section>
+      <section class="card"><h2>Platform use by age band (% of streamers)</h2><div class="chart"><canvas id="platforms" role="img" aria-label="Platform use by age band"></canvas></div></section>
+      <section class="card"><h2>Where respondents dropped out</h2><div class="chart"><canvas id="dropout" role="img" aria-label="Dropout by last question answered"></canvas></div></section>
+    </div>
+  </main>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+  <script>
+  (async function () {
+    const $ = (s) => document.querySelector(s);
+    const get = (u) => fetch(u).then((r) => { if (!r.ok) throw new Error(u); return r.json(); });
+    let report, cfg;
+    try {
+      [report, cfg] = await Promise.all([get("/reports/data_quality_report.json"), get("/config/questionnaire.json")]);
+    } catch (e) {
+      $("#app").innerHTML = "<p class='card'>Couldn't load the report. Run <code>python pipeline/validate.py</code>, start <code>python server/app.py</code> and open <code>/dashboard/</code>.</p>";
+      return;
+    }
+    const plat = Object.fromEntries(cfg.questions.find((q) => q.id === "Q2").options.map((o) => [o.id, o.label]));
+    const cityName = { metro: "Metro", tier2: "Tier 2", tier3: "Smaller city" };
+    const pretty = (s) => s.replace(/_/g, " ");
+    const sql = report.sql, st = report.status_counts, ev = report.evaluation;
+    const COLORS = ["#1d4e89", "#2a8c82", "#c27a00"];
+
+    // KPIs
+    const kpis = [
+      [report.records, "records received"],
+      [st.complete, "completes (raw)"],
+      [report.clean_completes, "valid completes"],
+      [(100 * report.flagged_completes / st.complete).toFixed(1) + "%", "completes failed QC"],
+      [report.dropout_pct + "%", "dropout rate"],
+      [Math.round(report.median_seconds.yes) + " s", "median time, streamers"],
+    ];
+    $("#kpis").innerHTML = kpis.map(([v, l]) => `<div class="kpi"><b>${v}</b><span>${l}</span></div>`).join("");
+
+    // Quota fill as progress bars, with a near-full warning
+    const near = [], rows = [];
+    for (const [group, cells] of Object.entries(report.quota)) {
+      rows.push(`<div class="qgroup">${group === "age_band" ? "Age band" : "City tier"}</div>`);
+      for (const c of cells) {
+        const label = group === "age_band" ? c.cell : (cityName[c.cell] || c.cell);
+        const state = c.pct >= 100 ? "full" : c.pct >= report.warn_at * 100 ? "warn" : "";
+        if (state) near.push(`${group === "age_band" ? "age " : ""}${label} (${c.pct}%)`);
+        rows.push(`<div class="qrow ${state}"><span>${label}</span><div class="track"><div class="fill" style="width:${Math.min(100, c.pct)}%"></div></div>` +
+                  `<small>${c.completes}/${c.target} ${state === "full" ? "full" : state ? "near full" : ""}</small></div>`);
+      }
+    }
+    $("#quota").innerHTML = rows.join("");
+    if (near.length) $("#banner").innerHTML = `<p class="banner"><b>Quota warning:</b> ${near.join(", ")} close to target. Consider closing these cells.</p>`;
+
+    // Pipeline accuracy
+    if (ev) {
+      const body = Object.entries(ev.per_type).map(([k, v]) => `<tr><td>${pretty(k)}</td><td>${v.caught}/${v.planted}</td></tr>`).join("");
+      const counts = {}; ev.missed.forEach((m) => { counts[m.error_type] = (counts[m.error_type] || 0) + 1; });
+      const missed = ev.missed.length ? `Missed: ${Object.entries(counts).map(([k, n]) => n + " " + pretty(k)).join(", ")}.` : "";
+      $("#eval").innerHTML = `<p class="score">${ev.caught}/${ev.planted} planted errors caught, ${ev.false_positives.length} false positives</p>` +
+        `<table><thead><tr><th>Error type</th><th>Caught</th></tr></thead><tbody>${body}</tbody></table><p class="note">${missed} Simulated data with known errors, so this shows the rules work as designed, not real-world accuracy.</p>`;
+    }
+
+    // Charts
+    Chart.defaults.color = "#566676";
+    Chart.defaults.font.family = getComputedStyle(document.body).fontFamily;
+    const bar = (id, labels, datasets, opts = {}) => new Chart($(id), { type: "bar", data: { labels, datasets },
+      options: Object.assign({ responsive: true, maintainAspectRatio: false, plugins: { legend: { display: datasets.length > 1 } },
+        scales: { y: { beginAtZero: true, grid: { color: "#e3e9ee" } }, x: { grid: { display: false } } } }, opts) });
+
+    bar("#daily", sql.responses_per_day.map((d) => d.day.slice(5)), [{ data: sql.responses_per_day.map((d) => d.responses), backgroundColor: COLORS[0] }]);
+    bar("#flags", sql.flags_by_rule.map((d) => pretty(d.rule)), [{ data: sql.flags_by_rule.map((d) => d.flagged), backgroundColor: COLORS[2] }],
+        { indexAxis: "y", scales: { x: { beginAtZero: true, grid: { color: "#e3e9ee" } }, y: { grid: { display: false } } } });
+    bar("#dropout", sql.dropout_by_last_question.map((d) => d.last_question), [{ data: sql.dropout_by_last_question.map((d) => d.abandoned), backgroundColor: COLORS[1] }]);
+
+    const pu = sql.platform_usage_by_age_band;
+    const bands = [...new Set(pu.map((r) => r.age_band))].sort();
+    const total = {}; pu.forEach((r) => { total[r.platform] = (total[r.platform] || 0) + r.pct_of_streamers; });
+    const order = Object.keys(total).sort((a, b) => total[b] - total[a]);
+    bar("#platforms", order.map((p) => plat[p] || p), bands.map((b, i) => ({
+      label: b, backgroundColor: COLORS[i % 3],
+      data: order.map((p) => (pu.find((r) => r.age_band === b && r.platform === p) || {}).pct_of_streamers || 0) })));
+  })();
+  </script>
+</body>
+</html>
